@@ -5,7 +5,7 @@ Two Railway services live from this repo — one per lab part:
 | Part | Purpose | URL | Features |
 |------|---------|-----|----------|
 | Part 3 | Simple agent (first public deploy) | https://feisty-nourishment-production.up.railway.app | `/health`, `/ask` (no auth) |
-| **Part 6** | **Production agent (graded submission)** | **https://day12-final-project-production.up.railway.app** | Full stack: auth, rate limit, cost guard, health, ready, JSON logs, security headers |
+| **Part 6** | **Production agent (graded submission)** | **https://remarkable-mercy-production-d435.up.railway.app** | Full stack: auth, rate limit, cost guard, health, ready, JSON logs, security headers |
 
 Both are auto-deployed from GitHub pushes to `main`.
 
@@ -15,7 +15,7 @@ Both are auto-deployed from GitHub pushes to `main`.
 
 ### URL
 
-**https://day12-final-project-production.up.railway.app**
+**https://remarkable-mercy-production-d435.up.railway.app**
 
 ### Platform
 
@@ -44,7 +44,7 @@ Railway, Dockerfile builder, GitHub integration.
 Set the URL and key locally:
 
 ```bash
-URL="https://day12-final-project-production.up.railway.app"
+URL="https://remarkable-mercy-production-d435.up.railway.app"
 KEY="<paste AGENT_API_KEY from Railway Variables>"
 ```
 
