@@ -8,10 +8,13 @@ Mục tiêu: Tránh bill bất ngờ từ LLM API.
 
 Trong production: lưu trong Redis/DB, không phải in-memory.
 """
+import os
 import time
 import logging
+from datetime import datetime
 from dataclasses import dataclass, field
 from fastapi import HTTPException
+import redis
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +22,34 @@ logger = logging.getLogger(__name__)
 # Giá token (tham khảo, thay đổi theo model)
 PRICE_PER_1K_INPUT_TOKENS = 0.00015   # GPT-4o-mini: $0.15/1M input
 PRICE_PER_1K_OUTPUT_TOKENS = 0.0006   # GPT-4o-mini: $0.60/1M output
+
+# Exercise 4.4 constants (monthly budget tracking in Redis)
+MONTHLY_BUDGET_USD = float(os.getenv("MONTHLY_BUDGET_USD", "10"))
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+redis_client = redis.Redis.from_url(REDIS_URL, decode_responses=True)
+
+
+def check_budget(user_id: str, estimated_cost: float) -> bool:
+    """
+    Exercise 4.4:
+    Return True nếu còn budget, False nếu vượt.
+
+    - Mỗi user có budget MONTHLY_BUDGET_USD/tháng
+    - Track spending trong Redis
+    - Tự reset theo tháng
+    """
+    month_key = datetime.now().strftime("%Y-%m")
+    key = f"budget:{user_id}:{month_key}"
+
+    current_raw = redis_client.get(key)
+    current = float(current_raw) if current_raw else 0.0
+
+    if current + estimated_cost > MONTHLY_BUDGET_USD:
+        return False
+
+    redis_client.incrbyfloat(key, estimated_cost)
+    redis_client.expire(key, 32 * 24 * 3600)
+    return True
 
 
 @dataclass

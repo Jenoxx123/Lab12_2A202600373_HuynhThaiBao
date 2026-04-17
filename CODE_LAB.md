@@ -198,7 +198,7 @@ Services nào được start? Chúng communicate thế nào?
 Test:
 ```bash
 # Health check
-curl http://localhost/health
+curl http://localhost:6333/health
 
 # Agent endpoint
 curl http://localhost/ask -X POST \
